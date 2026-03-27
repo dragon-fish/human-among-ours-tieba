@@ -82,5 +82,6 @@ function navigate(key: string) {
         <slot />
       </a-layout-content>
     </a-layout>
+    <NewPostModal />
   </a-layout>
 </template>
