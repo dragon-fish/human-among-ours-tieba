@@ -6,8 +6,12 @@ export const useAppStore = defineStore('app', () => {
   const unreadCount = ref(0)
 
   async function checkAuth() {
-    const data = await $fetch<{ authenticated: boolean }>('/api/auth/status')
-    hasToken.value = data.authenticated
+    try {
+      const data = await $fetch<{ authenticated: boolean }>('/api/auth/status')
+      hasToken.value = data.authenticated
+    } catch {
+      hasToken.value = false
+    }
   }
 
   async function refreshUnread() {
