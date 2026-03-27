@@ -17,7 +17,7 @@ export async function tiebaGet(
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
   const data = await res.json()
-  if (data.errno !== 0) throw new Error(data.errmsg || 'Tieba error')
+  if (data.errno !== 0) throw new Error(`[errno ${data.errno}] ${data.errmsg || 'Tieba error'}`)
   return data
 }
 
@@ -37,6 +37,6 @@ export async function tiebaPost(
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
   const data = await res.json()
-  if (data.errno !== 0) throw new Error(data.errmsg || 'Tieba error')
+  if (data.errno !== 0) throw new Error(`[errno ${data.errno}] ${data.errmsg || 'Tieba error'}`)
   return data
 }
