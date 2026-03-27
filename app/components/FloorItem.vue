@@ -83,7 +83,7 @@ function handleSubLike(postId: number, threadId: number) {
           :content="sub.content?.[0]?.text ?? ''"
           :agree-num="sub.agree?.agree_num ?? 0"
           @like="handleSubLike"
-          @reply="(pid) => emit('reply', pid, threadId, '')"
+          @reply="(pid, content) => emit('reply', pid, threadId, content)"
         />
       </div>
     </div>

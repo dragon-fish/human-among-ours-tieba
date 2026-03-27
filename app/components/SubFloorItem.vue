@@ -9,16 +9,13 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   like: [postId: number, threadId: number]
-  reply: [postId: number]
+  reply: [postId: number, content: string]
 }>()
 
 const showReply = ref(false)
-const replyLoading = ref(false)
 
-async function handleReply(content: string) {
-  replyLoading.value = true
-  emit('reply', props.postId)
-  replyLoading.value = false
+function handleReply(content: string) {
+  emit('reply', props.postId, content)
   showReply.value = false
 }
 </script>
@@ -37,6 +34,6 @@ async function handleReply(content: string) {
         <a-button type="link" size="small" @click="showReply = !showReply">回复</a-button>
       </div>
     </div>
-    <ReplyBox v-if="showReply" :loading="replyLoading" @submit="handleReply" />
+    <ReplyBox v-if="showReply" @submit="handleReply" />
   </div>
 </template>
