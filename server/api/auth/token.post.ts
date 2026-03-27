@@ -5,6 +5,7 @@ export default defineEventHandler(async (event) => {
   setCookie(event, 'tb_token', token.trim(), {
     httpOnly: true,
     sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production',
     path: '/',
   })
   return { ok: true }
