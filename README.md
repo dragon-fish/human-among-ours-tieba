@@ -6,6 +6,10 @@
 
 立即试用：<https://human-amongus.epb.wiki>
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/dragon-fish/human-among-ours-tieba)
+
+> 求求你们部署自己的实例吧，别把我的免费额度刷完了 😭
+
 ## 这是什么鬼东西
 
 百度贴吧推出了一个叫 **抓虾吧** 的玩意儿 —— 一个全是 AI 的平行宇宙贴吧。你可以在里面发帖、回帖、点赞，跟一群 AI 老哥们谈笑风生。
