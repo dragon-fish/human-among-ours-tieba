@@ -59,39 +59,39 @@ async function handleSubmit() {
       v-if="appStore.newPostModalVisible"
       class="fixed inset-0 z-40 flex items-center justify-center"
     >
-      <div class="absolute inset-0 bg-black/40" @click="appStore.newPostModalVisible = false" />
+      <div class="absolute inset-0 bg-[var(--overlay)]" @click="appStore.newPostModalVisible = false" />
 
-      <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-          <h3 class="text-[16px] font-bold text-[#222]">+ 发贴</h3>
-          <button class="text-[#999] hover:text-[#333] text-lg cursor-pointer" @click="appStore.newPostModalVisible = false">✕</button>
+      <div class="relative bg-[var(--bg-card)] rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
+        <div class="px-6 py-4 border-b border-[var(--border-light)] flex items-center justify-between">
+          <h3 class="text-[16px] font-bold text-[var(--text-primary)]">+ 发贴</h3>
+          <button class="text-[var(--text-muted)] hover:text-[var(--text-secondary)] text-lg cursor-pointer" @click="appStore.newPostModalVisible = false">✕</button>
         </div>
 
         <div class="p-6 space-y-4">
           <div>
-            <label class="block text-[13px] font-medium text-[#666] mb-1.5">标题</label>
+            <label class="block text-[13px] font-medium text-[var(--text-tertiary)] mb-1.5">标题</label>
             <input
               v-model="title"
               maxlength="30"
               placeholder="帖子标题（最多30字）"
-              class="w-full px-3 py-2.5 bg-[#f7f8fa] border border-gray-200 rounded-xl text-[13px] focus:outline-none focus:border-[#4e6ef2] focus:bg-white transition-colors placeholder:text-[#bbb]"
+              class="w-full px-3 py-2.5 bg-[var(--bg-base)] border border-[var(--border-default)] rounded-xl text-[13px] focus:outline-none focus:border-[var(--brand)] focus:bg-[var(--bg-card)] transition-colors placeholder:text-[var(--text-hint)]"
             >
           </div>
           <div>
-            <label class="block text-[13px] font-medium text-[#666] mb-1.5">内容</label>
+            <label class="block text-[13px] font-medium text-[var(--text-tertiary)] mb-1.5">内容</label>
             <textarea
               v-model="content"
               maxlength="1000"
               rows="6"
               placeholder="帖子内容（最多1000字，仅支持纯文本）"
-              class="w-full px-3 py-2.5 bg-[#f7f8fa] border border-gray-200 rounded-xl text-[13px] focus:outline-none focus:border-[#4e6ef2] focus:bg-white resize-none transition-colors placeholder:text-[#bbb]"
+              class="w-full px-3 py-2.5 bg-[var(--bg-base)] border border-[var(--border-default)] rounded-xl text-[13px] focus:outline-none focus:border-[var(--brand)] focus:bg-[var(--bg-card)] resize-none transition-colors placeholder:text-[var(--text-hint)]"
             />
           </div>
           <div>
-            <label class="block text-[13px] font-medium text-[#666] mb-1.5">板块（可选）</label>
+            <label class="block text-[13px] font-medium text-[var(--text-tertiary)] mb-1.5">板块（可选）</label>
             <select
               v-model="tabId"
-              class="w-full px-3 py-2.5 bg-[#f7f8fa] border border-gray-200 rounded-xl text-[13px] focus:outline-none focus:border-[#4e6ef2] focus:bg-white transition-colors"
+              class="w-full px-3 py-2.5 bg-[var(--bg-base)] border border-[var(--border-default)] rounded-xl text-[13px] focus:outline-none focus:border-[var(--brand)] focus:bg-[var(--bg-card)] transition-colors"
             >
               <option :value="undefined">选择发帖板块</option>
               <option v-for="b in BOARDS" :key="b.id" :value="b.id">{{ b.name }}</option>
@@ -99,14 +99,14 @@ async function handleSubmit() {
           </div>
         </div>
 
-        <div class="px-6 py-4 border-t border-gray-100 flex justify-end gap-2">
+        <div class="px-6 py-4 border-t border-[var(--border-light)] flex justify-end gap-2">
           <button
-            class="px-5 py-2 text-[13px] rounded-xl border border-gray-200 text-[#666] hover:bg-gray-50 cursor-pointer transition-colors"
+            class="px-5 py-2 text-[13px] rounded-xl border border-[var(--border-default)] text-[var(--text-tertiary)] hover:bg-[var(--bg-card-hover)] cursor-pointer transition-colors"
             @click="appStore.newPostModalVisible = false"
           >取消</button>
           <button
             :disabled="submitting"
-            class="px-5 py-2 text-[13px] rounded-xl bg-[#4e6ef2] text-white font-medium hover:bg-[#3d5bd9] disabled:opacity-50 cursor-pointer transition-colors"
+            class="px-5 py-2 text-[13px] rounded-xl bg-[var(--brand)] text-white font-medium hover:bg-[var(--brand-hover)] disabled:opacity-50 cursor-pointer transition-colors"
             @click="handleSubmit"
           >{{ submitting ? '发布中...' : '发布' }}</button>
         </div>

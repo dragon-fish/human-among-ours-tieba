@@ -67,26 +67,26 @@ async function handleDelete(postId: number) {
 <template>
   <div>
     <!-- Back button -->
-    <button class="mb-3 flex items-center gap-1 text-sm text-[#999] hover:text-[#4e6ef2] cursor-pointer transition-colors" @click="$router.push('/')">
+    <button class="mb-3 flex items-center gap-1 text-sm text-[var(--text-muted)] hover:text-[var(--brand)] cursor-pointer transition-colors" @click="$router.push('/')">
       ← 返回列表
     </button>
 
-    <div v-if="error" class="mb-3 px-4 py-3 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm">
+    <div v-if="error" class="mb-3 px-4 py-3 bg-[var(--status-error-bg)] border border-[var(--status-error-border)] text-[var(--status-error-text)] rounded-xl text-sm">
       {{ error.statusCode === 401 ? '请先前往设置页配置 TB_TOKEN' : error.message }}
     </div>
 
-    <div v-if="pending" class="text-center py-12 text-[#999]">加载中...</div>
+    <div v-if="pending" class="text-center py-12 text-[var(--text-muted)]">加载中...</div>
 
     <!-- First floor (OP) -->
-    <div v-if="firstFloor" class="bg-white rounded-xl overflow-hidden mb-3">
+    <div v-if="firstFloor" class="bg-[var(--bg-card)] rounded-xl overflow-hidden mb-3">
       <div class="p-5">
-        <h1 class="text-lg font-bold text-[#222] leading-snug mb-3">{{ firstFloor.title }}</h1>
-        <div v-if="firstFloor.author?.name" class="text-[13px] text-[#999] mb-3">{{ firstFloor.author.name }}</div>
-        <div class="text-[15px] text-[#333] leading-relaxed whitespace-pre-wrap">{{ firstFloor.content?.[0]?.text ?? '' }}</div>
+        <h1 class="text-lg font-bold text-[var(--text-primary)] leading-snug mb-3">{{ firstFloor.title }}</h1>
+        <div v-if="firstFloor.author?.name" class="text-[13px] text-[var(--text-muted)] mb-3">{{ firstFloor.author.name }}</div>
+        <div class="text-[15px] text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap">{{ firstFloor.content?.[0]?.text ?? '' }}</div>
       </div>
       <!-- OP action bar -->
-      <div class="flex items-center gap-6 px-5 py-3 border-t border-gray-100 text-[13px] text-[#999]">
-        <button class="flex items-center gap-1.5 hover:text-[#4e6ef2] cursor-pointer transition-colors" @click="handleLike(firstFloor.id, Number(threadId), 3)">
+      <div class="flex items-center gap-6 px-5 py-3 border-t border-[var(--border-light)] text-[13px] text-[var(--text-muted)]">
+        <button class="flex items-center gap-1.5 hover:text-[var(--brand)] cursor-pointer transition-colors" @click="handleLike(firstFloor.id, Number(threadId), 3)">
           👍 <span>{{ firstFloor.agree?.agree_num ?? 0 }}</span>
         </button>
         <span class="flex items-center gap-1.5">💬 {{ replyCount }}</span>
@@ -94,16 +94,16 @@ async function handleDelete(postId: number) {
     </div>
 
     <!-- Replies section -->
-    <div v-if="posts.length > 0 || !pending" class="bg-white rounded-xl overflow-hidden">
+    <div v-if="posts.length > 0 || !pending" class="bg-[var(--bg-card)] rounded-xl overflow-hidden">
       <!-- Reply header -->
-      <div class="flex items-center justify-between px-5 py-3 border-b border-gray-100">
-        <span class="text-sm font-semibold text-[#222]">全部回复</span>
+      <div class="flex items-center justify-between px-5 py-3 border-b border-[var(--border-light)]">
+        <span class="text-sm font-semibold text-[var(--text-primary)]">全部回复</span>
         <div class="flex gap-3">
           <button
             v-for="opt in sortOpts"
             :key="opt.v"
             class="text-xs cursor-pointer transition-colors"
-            :class="sort === opt.v ? 'text-[#4e6ef2] font-semibold' : 'text-[#999] hover:text-[#333]'"
+            :class="sort === opt.v ? 'text-[var(--brand)] font-semibold' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'"
             @click="sort = opt.v"
           >{{ opt.l }}</button>
         </div>
@@ -127,14 +127,14 @@ async function handleDelete(postId: number) {
         @delete="handleDelete"
       />
 
-      <div v-if="posts.length === 0 && !pending" class="py-8 text-center text-[13px] text-[#999]">暂无回复</div>
+      <div v-if="posts.length === 0 && !pending" class="py-8 text-center text-[13px] text-[var(--text-muted)]">暂无回复</div>
     </div>
 
     <!-- Pagination -->
     <div v-if="totalPage > 1" class="mt-4 flex justify-center gap-2">
-      <button :disabled="pn <= 1" class="px-4 py-2 text-sm bg-white rounded-lg border border-gray-200 disabled:opacity-40 cursor-pointer hover:bg-gray-50" @click="pn--">上一页</button>
-      <span class="px-4 py-2 text-sm text-[#999]">{{ pn }} / {{ totalPage }}</span>
-      <button :disabled="pn >= totalPage" class="px-4 py-2 text-sm bg-white rounded-lg border border-gray-200 disabled:opacity-40 cursor-pointer hover:bg-gray-50" @click="pn++">下一页</button>
+      <button :disabled="pn <= 1" class="px-4 py-2 text-sm bg-[var(--bg-card)] rounded-lg border border-[var(--border-default)] disabled:opacity-40 cursor-pointer hover:bg-[var(--bg-card-hover)]" @click="pn--">上一页</button>
+      <span class="px-4 py-2 text-sm text-[var(--text-muted)]">{{ pn }} / {{ totalPage }}</span>
+      <button :disabled="pn >= totalPage" class="px-4 py-2 text-sm bg-[var(--bg-card)] rounded-lg border border-[var(--border-default)] disabled:opacity-40 cursor-pointer hover:bg-[var(--bg-card-hover)]" @click="pn++">下一页</button>
     </div>
   </div>
 </template>

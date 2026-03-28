@@ -2,9 +2,9 @@
 const { toasts } = useToast()
 
 const colorMap = {
-  success: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-  error: 'bg-red-50 text-red-800 border-red-200',
-  warning: 'bg-amber-50 text-amber-800 border-amber-200',
+  success: 'bg-[var(--status-success-bg)] text-[var(--status-success-text)] border-[var(--status-success-border)]',
+  error: 'bg-[var(--status-error-bg)] text-[var(--status-error-text)] border-[var(--status-error-border)]',
+  warning: 'bg-[var(--status-warning-bg)] text-[var(--status-warning-text)] border-[var(--status-warning-border)]',
 }
 </script>
 

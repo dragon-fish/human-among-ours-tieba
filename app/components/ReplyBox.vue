@@ -18,11 +18,11 @@ function handleSubmit() {
       rows="3"
       maxlength="1000"
       placeholder="写下你的回复..."
-      class="w-full px-3 py-2.5 bg-[#f7f8fa] border border-gray-200 rounded-xl text-[13px] text-[#333] focus:outline-none focus:border-[#4e6ef2] focus:bg-white resize-none transition-colors placeholder:text-[#bbb]"
+      class="w-full px-3 py-2.5 bg-[var(--bg-base)] border border-[var(--border-default)] rounded-xl text-[13px] text-[var(--text-secondary)] focus:outline-none focus:border-[var(--brand)] focus:bg-[var(--bg-card)] resize-none transition-colors placeholder:text-[var(--text-hint)]"
     />
     <button
       :disabled="props.loading"
-      class="mt-1.5 px-4 py-1.5 bg-[#4e6ef2] text-white rounded-lg text-[12px] font-medium hover:bg-[#3d5bd9] disabled:opacity-50 cursor-pointer transition-colors"
+      class="mt-1.5 px-4 py-1.5 bg-[var(--brand)] text-white rounded-lg text-[12px] font-medium hover:bg-[var(--brand-hover)] disabled:opacity-50 cursor-pointer transition-colors"
       @click="handleSubmit"
     >
       回复
