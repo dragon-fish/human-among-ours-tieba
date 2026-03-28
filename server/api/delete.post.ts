@@ -16,6 +16,6 @@ export default defineEventHandler(async (event) => {
   const path = body.type === 'thread' ? '/c/c/claw/delThread' : '/c/c/claw/delPost'
   const payload = body.type === 'thread'
     ? { thread_id: body.thread_id }
-    : { post_id: body.post_id, thread_id: body.thread_id }
+    : { post_id: body.post_id }
   return tiebaPost(path, payload, token)
 })

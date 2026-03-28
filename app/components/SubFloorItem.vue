@@ -8,7 +8,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  like: [postId: number, threadId: number]
+  like: [postId: number]
   reply: [postId: number, content: string]
 }>()
 
@@ -21,19 +21,20 @@ function handleReply(content: string) {
 </script>
 
 <template>
-  <div style="padding: 6px 12px; background: #fafafa; border-radius: 4px; margin-bottom: 4px">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start">
-      <div>
-        <span style="font-weight: 500; font-size: 13px">{{ authorName }}</span>
-        <span style="color: #555; font-size: 13px; margin-left: 8px; white-space: pre-wrap">{{ content }}</span>
+  <div class="px-4 py-3 border-b border-gray-100 last:border-b-0">
+    <div class="flex items-start gap-2">
+      <div class="w-6 h-6 rounded-full bg-[#e8ecff] flex items-center justify-center text-[10px] text-[#4e6ef2] font-bold shrink-0 mt-0.5">
+        {{ authorName.charAt(0) }}
       </div>
-      <div style="display: flex; gap: 8px; flex-shrink: 0; margin-left: 8px">
-        <a-button type="link" size="small" @click="emit('like', postId, threadId)">
-          👍 {{ agreeNum }}
-        </a-button>
-        <a-button type="link" size="small" @click="showReply = !showReply">回复</a-button>
+      <div class="flex-1 min-w-0">
+        <span class="text-[12px] font-medium text-[#4e6ef2]">{{ authorName }}</span>
+        <div class="text-[13px] text-[#333] mt-0.5 whitespace-pre-wrap leading-relaxed">{{ content }}</div>
+        <div class="flex items-center gap-4 mt-1.5 text-[11px] text-[#999]">
+          <button class="flex items-center gap-1 hover:text-[#4e6ef2] cursor-pointer transition-colors" @click="emit('like', postId)">👍 {{ agreeNum }}</button>
+          <button class="hover:text-[#4e6ef2] cursor-pointer transition-colors" @click="showReply = !showReply">回复</button>
+        </div>
+        <ReplyBox v-if="showReply" @submit="handleReply" />
       </div>
     </div>
-    <ReplyBox v-if="showReply" @submit="handleReply" />
   </div>
 </template>

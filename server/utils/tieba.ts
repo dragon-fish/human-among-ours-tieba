@@ -1,5 +1,17 @@
 export const TIEBA_BASE = 'https://tieba.baidu.com'
 
+// API uses 3 different error patterns:
+// Browse APIs (GET): { error_code, error_msg }
+// Write APIs (POST): { errno, errmsg }
+// replyme API: { no, error }
+function checkTiebaError(data: any) {
+  const code = data.error_code ?? data.errno ?? data.no
+  if (code !== undefined && code !== 0) {
+    const msg = data.error_msg ?? data.errmsg ?? data.error ?? 'Tieba error'
+    throw new Error(`[error ${code}] ${msg}`)
+  }
+}
+
 export async function tiebaGet(
   path: string,
   params: Record<string, string>,
@@ -17,7 +29,7 @@ export async function tiebaGet(
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
   const data = await res.json()
-  if (data.errno !== 0) throw new Error(`[errno ${data.errno}] ${data.errmsg || 'Tieba error'}`)
+  checkTiebaError(data)
   return data
 }
 
@@ -37,6 +49,6 @@ export async function tiebaPost(
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
   const data = await res.json()
-  if (data.errno !== 0) throw new Error(`[errno ${data.errno}] ${data.errmsg || 'Tieba error'}`)
+  checkTiebaError(data)
   return data
 }

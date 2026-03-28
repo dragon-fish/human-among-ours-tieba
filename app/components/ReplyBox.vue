@@ -12,22 +12,20 @@ function handleSubmit() {
 </script>
 
 <template>
-  <div style="margin-top: 8px">
-    <a-textarea
-      v-model:value="content"
-      :rows="3"
-      :maxlength="1000"
+  <div class="mt-2">
+    <textarea
+      v-model="content"
+      rows="3"
+      maxlength="1000"
       placeholder="写下你的回复..."
-      show-count
+      class="w-full px-3 py-2.5 bg-[#f7f8fa] border border-gray-200 rounded-xl text-[13px] text-[#333] focus:outline-none focus:border-[#4e6ef2] focus:bg-white resize-none transition-colors placeholder:text-[#bbb]"
     />
-    <a-button
-      type="primary"
-      size="small"
-      :loading="props.loading"
-      style="margin-top: 8px"
+    <button
+      :disabled="props.loading"
+      class="mt-1.5 px-4 py-1.5 bg-[#4e6ef2] text-white rounded-lg text-[12px] font-medium hover:bg-[#3d5bd9] disabled:opacity-50 cursor-pointer transition-colors"
       @click="handleSubmit"
     >
       回复
-    </a-button>
+    </button>
   </div>
 </template>

@@ -6,86 +6,104 @@ const props = defineProps<{
   authorName: string
   content: string
   agreeNum: number
-  subPostCount: number
+  subPosts: any[]
   isOp?: boolean
+  showBorder?: boolean
 }>()
 
 const emit = defineEmits<{
   like: [postId: number, threadId: number, objType: number]
   reply: [postId: number, threadId: number, content: string]
-  delete: [postId: number, threadId: number]
+  delete: [postId: number]
 }>()
 
 const showReply = ref(false)
 const showSubFloors = ref(false)
-const replyLoading = ref(false)
 
-const { data: subFloorData, pending: subPending, execute: loadSubFloors } = await useLazyFetch(
-  () => `/api/floor?post_id=${props.postId}&thread_id=${props.threadId}`,
-  { immediate: false },
-)
+const fetchedSubFloors = ref<any[] | null>(null)
+const subPending = ref(false)
 
-const subFloors = computed(() => (subFloorData.value as any)?.data?.post_list ?? [])
+const subFloors = computed(() => fetchedSubFloors.value ?? props.subPosts ?? [])
 
 async function toggleSubFloors() {
-  if (!showSubFloors.value && subFloors.value.length === 0) {
-    await loadSubFloors()
+  if (!showSubFloors.value && !fetchedSubFloors.value) {
+    subPending.value = true
+    try {
+      const res = await $fetch<any>(`/api/floor?post_id=${props.postId}&thread_id=${props.threadId}`)
+      fetchedSubFloors.value = res.data?.post_list ?? []
+    } catch { /* fall back */ }
+    finally { subPending.value = false }
   }
   showSubFloors.value = !showSubFloors.value
 }
 
-async function handleReply(content: string) {
-  replyLoading.value = true
+function handleReply(content: string) {
   emit('reply', props.postId, props.threadId, content)
-  replyLoading.value = false
   showReply.value = false
 }
 
-function handleSubLike(postId: number, threadId: number) {
-  emit('like', postId, threadId, 2)
+function handleSubReply(postId: number, content: string) {
+  emit('reply', postId, props.threadId, content)
 }
 </script>
 
 <template>
-  <a-card size="small" style="margin-bottom: 8px">
-    <template #title>
-      <span style="color: #888; font-size: 13px">{{ floor }}楼</span>
-      <span style="font-weight: 500; margin-left: 8px">{{ authorName }}</span>
-    </template>
-    <template #extra>
-      <a-space>
-        <a-button type="link" size="small" @click="emit('like', postId, threadId, isOp ? 3 : 1)">
-          👍 {{ agreeNum }}
-        </a-button>
-        <a-button type="link" size="small" @click="showReply = !showReply">回复</a-button>
-        <a-popconfirm title="确认删除？" @confirm="emit('delete', postId, threadId)">
-          <a-button type="link" size="small" danger>删除</a-button>
-        </a-popconfirm>
-      </a-space>
-    </template>
+  <div
+    class="px-5 py-4"
+    :class="showBorder ? 'border-b border-gray-100' : ''"
+  >
+    <!-- Author row -->
+    <div class="flex items-center gap-2 mb-2.5">
+      <div class="w-8 h-8 rounded-full bg-[#e8ecff] flex items-center justify-center text-xs text-[#4e6ef2] font-bold shrink-0">
+        {{ authorName.charAt(0) }}
+      </div>
+      <div>
+        <div class="text-[13px] font-medium text-[#333]">{{ authorName }}</div>
+      </div>
+      <span class="ml-auto text-[11px] text-[#ccc]">{{ floor }}楼</span>
+    </div>
 
-    <div style="white-space: pre-wrap">{{ content }}</div>
+    <!-- Content -->
+    <div class="text-[14px] text-[#333] leading-relaxed whitespace-pre-wrap mb-3 pl-10">{{ content }}</div>
 
-    <ReplyBox v-if="showReply" :loading="replyLoading" @submit="handleReply" />
+    <!-- Action bar -->
+    <div class="flex items-center gap-5 pl-10 text-[12px] text-[#999]">
+      <button class="flex items-center gap-1 hover:text-[#4e6ef2] cursor-pointer transition-colors" @click="emit('like', postId, threadId, isOp ? 3 : 1)">
+        👍 {{ agreeNum }}
+      </button>
+      <button class="hover:text-[#4e6ef2] cursor-pointer transition-colors" @click="showReply = !showReply">回复</button>
+      <button class="hover:text-[#ff6046] cursor-pointer transition-colors" @click="emit('delete', postId)">删除</button>
+    </div>
 
-    <div v-if="subPostCount > 0" style="margin-top: 8px">
-      <a-button type="link" size="small" @click="toggleSubFloors">
-        {{ showSubFloors ? '收起' : `查看 ${subPostCount} 条楼中楼` }}
-      </a-button>
-      <a-spin v-if="subPending" size="small" />
-      <div v-if="showSubFloors" style="margin-top: 4px">
+    <!-- Reply box -->
+    <div v-if="showReply" class="pl-10 mt-2">
+      <ReplyBox @submit="handleReply" />
+    </div>
+
+    <!-- Sub-floors (楼中楼) -->
+    <div v-if="subPosts.length > 0" class="ml-10 mt-3 bg-[#f7f8fa] rounded-xl overflow-hidden">
+      <div v-if="!showSubFloors" class="px-4 py-2.5">
+        <button class="text-[12px] text-[#4e6ef2] hover:text-[#3d5bd9] cursor-pointer" @click="toggleSubFloors">
+          查看 {{ subPosts.length }} 条回复 &gt;
+        </button>
+      </div>
+      <div v-else>
         <SubFloorItem
           v-for="sub in subFloors"
-          :key="sub.post_id"
-          :post-id="sub.post_id"
+          :key="sub.id"
+          :post-id="sub.id"
           :thread-id="threadId"
           :author-name="sub.author?.name ?? ''"
           :content="sub.content?.[0]?.text ?? ''"
           :agree-num="sub.agree?.agree_num ?? 0"
-          @like="handleSubLike"
-          @reply="(pid, content) => emit('reply', pid, threadId, content)"
+          @like="(pid) => emit('like', pid, threadId, 2)"
+          @reply="handleSubReply"
         />
+        <div class="px-4 py-2">
+          <button class="text-[12px] text-[#999] hover:text-[#4e6ef2] cursor-pointer" @click="showSubFloors = false">收起</button>
+        </div>
       </div>
+      <div v-if="subPending" class="px-4 py-2 text-[12px] text-[#999]">加载中...</div>
     </div>
-  </a-card>
+  </div>
 </template>

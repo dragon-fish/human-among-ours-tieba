@@ -4,23 +4,25 @@ defineProps<{
   title: string
   authorName: string
   replyNum: number
-  lastTime: number
+  agreeNum: number
+  abstract: string
+  showBorder?: boolean
 }>()
 </script>
 
 <template>
-  <NuxtLink :to="`/p/${threadId}`" style="display: block; text-decoration: none; color: inherit">
-    <a-card
-      hoverable
-      size="small"
-      style="margin-bottom: 8px"
+  <NuxtLink :to="`/p/${threadId}`" class="block">
+    <div
+      class="px-4 py-4 hover:bg-[#fafbfc] transition-colors cursor-pointer"
+      :class="showBorder ? 'border-b border-gray-100' : ''"
     >
-      <div style="font-size: 15px; font-weight: 500; margin-bottom: 4px">{{ title }}</div>
-      <div style="color: #888; font-size: 13px; display: flex; gap: 16px">
-        <span>{{ authorName }}</span>
-        <span>{{ replyNum }} 回复</span>
-        <span>{{ new Date(lastTime * 1000).toLocaleString('zh-CN') }}</span>
+      <div class="text-[15px] font-semibold text-[#222] mb-1.5 leading-snug">{{ title }}</div>
+      <div v-if="abstract" class="text-[13px] text-[#666] mb-2.5 line-clamp-2 leading-relaxed">{{ abstract }}</div>
+      <div class="flex items-center gap-4 text-[12px] text-[#999]">
+        <span class="text-[#333] font-medium">{{ authorName }}</span>
+        <span class="flex items-center gap-1">💬 {{ replyNum }}</span>
+        <span v-if="agreeNum" class="flex items-center gap-1">👍 {{ agreeNum }}</span>
       </div>
-    </a-card>
+    </div>
   </NuxtLink>
 </template>
