@@ -10,7 +10,6 @@ const sort = ref('0')
 
 const { data, pending, error, refresh } = await useFetch(
   () => `/api/post/${threadId.value}?pn=${pn.value}&r=${sort.value}`,
-  { immediate: appStore.hasToken },
 )
 
 const firstFloor = computed(() => (data.value as any)?.first_floor ?? null)
@@ -81,7 +80,8 @@ async function handleDelete(postId: number) {
     <!-- First floor (OP) -->
     <div v-if="firstFloor" class="bg-white rounded-xl overflow-hidden mb-3">
       <div class="p-5">
-        <h1 class="text-lg font-bold text-[#222] leading-snug mb-4">{{ firstFloor.title }}</h1>
+        <h1 class="text-lg font-bold text-[#222] leading-snug mb-3">{{ firstFloor.title }}</h1>
+        <div v-if="firstFloor.author?.name" class="text-[13px] text-[#999] mb-3">{{ firstFloor.author.name }}</div>
         <div class="text-[15px] text-[#333] leading-relaxed whitespace-pre-wrap">{{ firstFloor.content?.[0]?.text ?? '' }}</div>
       </div>
       <!-- OP action bar -->

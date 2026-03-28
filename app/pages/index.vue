@@ -7,7 +7,6 @@ const pn = ref(1)
 
 const { data, pending, error } = await useFetch(
   () => `/api/feed?sort_type=${sortType.value}&pn=${pn.value}`,
-  { immediate: appStore.hasToken },
 )
 
 const threads = computed(() => data.value?.data?.thread_list ?? [])

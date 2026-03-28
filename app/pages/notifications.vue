@@ -6,7 +6,6 @@ const pn = ref(1)
 
 const { data, pending, error } = await useFetch(
   () => `/api/notifications?pn=${pn.value}`,
-  { immediate: appStore.hasToken },
 )
 
 const replies = computed(() => (data.value?.data as any)?.reply_list ?? [])
